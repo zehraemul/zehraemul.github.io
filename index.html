@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tek İzlemelik Video</title>
+  <style>
+    /* Devre dışı bırakılmış buton görünümü için */
+    .disabled {
+      pointer-events: none;
+      opacity: 0.5;
+    }
+  </style>
+</head>
+<body>
+  <video id="myVideo" width="600" controls>
+    <source src="video.mp4" type="video/mp4">
+    Tarayıcınız bu videoyu desteklemiyor.
+  </video>
+
+  <script>
+    const video = document.getElementById("myVideo");
+    const hasWatched = localStorage.getItem("videoWatched");
+
+    // Videonun daha önce izlendiğini kontrol ediyoruz
+    if (hasWatched) {
+      video.controls = false; // Video kontrollerini kapat
+      video.classList.add("disabled"); // Butonu inaktif yap
+      document.body.innerHTML += "<p>Bu videoyu zaten izlediniz.</p>";
+    } else {
+      // Video tamamlandığında izlenme bilgisi kaydedilir ve kontroller devre dışı bırakılır
+      video.addEventListener("ended", () => {
+        localStorage.setItem("videoWatched", "true");
+        video.controls = false; // Kontrolleri devre dışı bırak
+        video.classList.add("disabled"); // Butonu inaktif yap
+        document.body.innerHTML += "<p>Videoyu izleme hakkınız sona erdi.</p>";
+      });
+    }
+  </script>
+</body>
+</html>
